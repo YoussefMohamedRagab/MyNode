@@ -1,4 +1,3 @@
-import client from '../helpers/redisClient.js';
 import { verifyToken } from '../helpers/tokenHelper.js'; // Adjust the path to your token service
 
 // Middleware to verify token
@@ -8,13 +7,6 @@ const authenticate = async (req, res, next) => {
     if (!token) {
         return res.status(401).json({ message: "Unauthorized" });
     }
-
-    // Check if the token is revoked
-    const isRevoked = await client.get(token);
-    if (!isRevoked) {
-        return res.status(401).json({ message: "Invalid token" });
-    }
-
     try {
         const user = verifyToken(token);
         req.user = user;
